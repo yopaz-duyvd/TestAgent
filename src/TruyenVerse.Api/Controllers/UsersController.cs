@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TruyenVerse.Application.Interfaces.Services;
 using TruyenVerse.Domain.Entities;
+using TruyenVerse.Domain.Enums;
 
 namespace TruyenVerse.Api.Controllers
 {
@@ -15,27 +16,50 @@ namespace TruyenVerse.Api.Controllers
             _userService = userService;
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<ActionResult<User>> Get(Guid id)
+        [HttpPost("login")]
+        public async Task<ActionResult<User>> Login(LoginRequest request)
         {
-            var user = await _userService.GetUserAsync(id);
+            var user = await _userService.LoginAsync(request.Email, request.Password);
             if (user is null)
             {
-                return NotFound();
+                return Unauthorized();
             }
 
             return Ok(user);
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<User>> GetAll() =>
-            await _userService.GetUsersAsync();
-
-        [HttpPost]
-        public async Task<ActionResult> Create(User user)
+        [HttpPost("register")]
+        public async Task<ActionResult<User>> Register(RegisterRequest request)
         {
-            await _userService.CreateUserAsync(user);
-            return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
+            var user = await _userService.RegisterAsync(request.Email, request.Password, request.FullName);
+            return Ok(user);
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
+        {
+            await _userService.ForgotPasswordAsync(request.Email);
+            return NoContent();
+        }
+
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
+        {
+            await _userService.ChangePasswordAsync(request.UserId, request.NewPassword);
+            return NoContent();
+        }
+
+        [HttpPut("update-profile")]
+        public async Task<IActionResult> UpdateProfile(UpdateProfileRequest request)
+        {
+            await _userService.UpdateProfileAsync(request.UserId, request.FullName, request.Gender, request.Address, request.Introduction);
+            return NoContent();
         }
     }
+
+    public record LoginRequest(string Email, string Password);
+    public record RegisterRequest(string Email, string Password, string FullName);
+    public record ForgotPasswordRequest(string Email);
+    public record ChangePasswordRequest(Guid UserId, string NewPassword);
+    public record UpdateProfileRequest(Guid UserId, string FullName, Gender Gender, string Address, string Introduction);
 }
