@@ -16,11 +16,6 @@ namespace TruyenVerse.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Story>()
-                .HasMany(s => s.Chapters)
-                .WithOne()
-                .HasForeignKey(c => c.StoryId);
         }
     }
 }

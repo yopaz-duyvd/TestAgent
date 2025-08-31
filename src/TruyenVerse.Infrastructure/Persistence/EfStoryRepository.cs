@@ -31,12 +31,18 @@ namespace TruyenVerse.Infrastructure.Persistence
 
         public async Task<IEnumerable<Story>> GetAllAsync()
         {
-            return await _context.Stories.Include(s => s.Chapters).ToListAsync();
+            return await _context.Stories
+                .Include(s => s.User)
+                .Include(s => s.Chapters)
+                .ToListAsync();
         }
 
         public async Task<Story?> GetByIdAsync(Guid id)
         {
-            return await _context.Stories.Include(s => s.Chapters).FirstOrDefaultAsync(s => s.Id == id);
+            return await _context.Stories
+                .Include(s => s.User)
+                .Include(s => s.Chapters)
+                .FirstOrDefaultAsync(s => s.Id == id);
         }
 
         public async Task UpdateAsync(Story story)

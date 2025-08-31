@@ -20,7 +20,7 @@ namespace TruyenVerse.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Story>> CreateStory(CreateStoryRequest request)
         {
-            var story = await _storyService.CreateStoryAsync(request.Title, request.Description);
+            var story = await _storyService.CreateStoryAsync(request.UserId, request.Title, request.Description);
             return Ok(story);
         }
 
@@ -60,7 +60,7 @@ namespace TruyenVerse.Api.Controllers
         }
     }
 
-    public record CreateStoryRequest(string Title, string Description);
+    public record CreateStoryRequest(Guid UserId, string Title, string Description);
     public record UpdateStoryRequest(string Title, string Description);
     public record AddChapterRequest(string Title, string Content);
     public record UpdateChapterRequest(string Title, string Content);
