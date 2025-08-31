@@ -47,8 +47,7 @@ namespace TruyenVerse.Application.Services
             {
                 Email = email,
                 Password = password,
-                FullName = fullName,
-                Role = UserRole.Admin
+                FullName = fullName
             };
 
             await _repository.AddAsync(user);

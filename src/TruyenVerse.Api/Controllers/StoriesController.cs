@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TruyenVerse.Application.Interfaces.Services;
 using TruyenVerse.Domain.Entities;
@@ -6,6 +7,7 @@ namespace TruyenVerse.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class StoriesController : ControllerBase
     {
         private readonly IStoryService _storyService;
