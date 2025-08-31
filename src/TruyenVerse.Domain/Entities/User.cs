@@ -11,5 +11,6 @@ namespace TruyenVerse.Domain.Entities
         public string Address { get; set; } = string.Empty;
         public string Introduction { get; set; } = string.Empty;
         public UserRole? Role { get; set; }
+        public List<Story>? Stories { get; set; }
     }
 }

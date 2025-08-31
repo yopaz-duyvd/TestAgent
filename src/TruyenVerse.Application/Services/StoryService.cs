@@ -13,7 +13,7 @@ namespace TruyenVerse.Application.Services
             _repository = repository;
         }
 
-        public async Task<Story> CreateStoryAsync(string title, string description)
+        public async Task<Story> CreateStoryAsync(Guid userId, string title, string description)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
@@ -22,6 +22,7 @@ namespace TruyenVerse.Application.Services
 
             var story = new Story
             {
+                UserId = userId,
                 Title = title,
                 Description = description
             };
