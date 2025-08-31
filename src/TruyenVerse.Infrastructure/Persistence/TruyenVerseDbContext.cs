@@ -1,0 +1,26 @@
+using Microsoft.EntityFrameworkCore;
+using TruyenVerse.Domain.Entities;
+
+namespace TruyenVerse.Infrastructure.Persistence
+{
+    public class TruyenVerseDbContext : DbContext
+    {
+        public TruyenVerseDbContext(DbContextOptions<TruyenVerseDbContext> options) : base(options)
+        {
+        }
+
+        public DbSet<User> Users => Set<User>();
+        public DbSet<Story> Stories => Set<Story>();
+        public DbSet<Chapter> Chapters => Set<Chapter>();
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Story>()
+                .HasMany(s => s.Chapters)
+                .WithOne()
+                .HasForeignKey(c => c.StoryId);
+        }
+    }
+}

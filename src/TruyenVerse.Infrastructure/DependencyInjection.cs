@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TruyenVerse.Application.Interfaces.Repositories;
@@ -11,9 +12,15 @@ namespace TruyenVerse.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IUserRepository, InMemoryUserRepository>();
-            services.AddSingleton<IStoryRepository, InMemoryStoryRepository>();
-            var secret = configuration["Jwt:Key"] ?? "supersecret";
+            var connectionString = configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+            services.AddDbContext<TruyenVerseDbContext>(options =>
+                options.UseSqlServer(connectionString));
+
+            services.AddScoped<IUserRepository, EfUserRepository>();
+            services.AddScoped<IStoryRepository, EfStoryRepository>();
+
+            var secret = configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT key not configured");
             services.AddSingleton<IJwtTokenService>(new JwtTokenService(secret));
             return services;
         }
