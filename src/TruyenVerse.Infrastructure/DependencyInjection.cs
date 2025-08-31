@@ -9,6 +9,7 @@ namespace TruyenVerse.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services.AddSingleton<IUserRepository, InMemoryUserRepository>();
+            services.AddSingleton<IStoryRepository, InMemoryStoryRepository>();
             return services;
         }
     }
