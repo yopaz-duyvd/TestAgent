@@ -1,17 +1,28 @@
 {
   "language": "csharp",
   "framework": ".NET 8",
+  "architecture": "clean",
   "projectType": "webapi",
+  "entryProject": "src/TruyenVerse.Api",
   "projects": [
     "src/TruyenVerse.Api",
     "src/TruyenVerse.Application",
     "src/TruyenVerse.Domain",
     "src/TruyenVerse.Infrastructure"
   ],
-  "entryProject": "src/TruyenVerse.Api",
+  "features": {
+    "useDatabase": true,
+    "databaseType": "sqlserver",
+    "useCache": true,
+    "cacheType": "redis",
+    "useAuthentication": true,
+    "authenticationType": "jwt"
+  },
   "rules": {
     "ensureProjectsAddedToSolution": true,
     "ensureProjectReferences": true,
-    "respectArchitectureLayers": true
+    "respectArchitectureLayers": true,
+    "useEfCoreInsteadOfInMemory": true,
+    "doNotHardcodeSecrets": true
   }
 }

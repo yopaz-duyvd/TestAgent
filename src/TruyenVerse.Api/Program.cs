@@ -1,15 +1,21 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using TruyenVerse.Application;
 using TruyenVerse.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddUserSecrets<Program>();
+}
+
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
-var key = builder.Configuration["Jwt:Key"] ?? "supersecret";
+var key = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT key not configured");
 var keyBytes = Encoding.UTF8.GetBytes(key);
 
 builder.Services.AddAuthentication(options =>
