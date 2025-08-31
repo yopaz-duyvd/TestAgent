@@ -10,6 +10,6 @@ namespace TruyenVerse.Domain.Entities
         public Gender Gender { get; set; } = Gender.Unknown;
         public string Address { get; set; } = string.Empty;
         public string Introduction { get; set; } = string.Empty;
-        public UserRole Role { get; set; } = UserRole.Admin;
+        public UserRole? Role { get; set; }
     }
 }

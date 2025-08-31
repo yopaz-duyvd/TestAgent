@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TruyenVerse.Application.Interfaces.Services;
 using TruyenVerse.Domain.Entities;
@@ -7,17 +8,21 @@ namespace TruyenVerse.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IJwtTokenService _tokenService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, IJwtTokenService tokenService)
         {
             _userService = userService;
+            _tokenService = tokenService;
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<User>> Login(LoginRequest request)
+        [AllowAnonymous]
+        public async Task<ActionResult<string>> Login(LoginRequest request)
         {
             var user = await _userService.LoginAsync(request.Email, request.Password);
             if (user is null)
@@ -25,10 +30,12 @@ namespace TruyenVerse.Api.Controllers
                 return Unauthorized();
             }
 
-            return Ok(user);
+            var token = _tokenService.GenerateToken(user);
+            return Ok(token);
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<ActionResult<User>> Register(RegisterRequest request)
         {
             var user = await _userService.RegisterAsync(request.Email, request.Password, request.FullName);
@@ -36,6 +43,7 @@ namespace TruyenVerse.Api.Controllers
         }
 
         [HttpPost("forgot-password")]
+        [AllowAnonymous]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
         {
             await _userService.ForgotPasswordAsync(request.Email);
