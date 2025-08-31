@@ -9,6 +9,7 @@ namespace TruyenVerse.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IStoryService, StoryService>();
             return services;
         }
     }
