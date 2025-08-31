@@ -1,5 +1,17 @@
 {
   "language": "csharp",
   "framework": ".NET 8",
-  "projectType": "webapi"
+  "projectType": "webapi",
+  "projects": [
+    "src/TruyenVerse.Api",
+    "src/TruyenVerse.Application",
+    "src/TruyenVerse.Domain",
+    "src/TruyenVerse.Infrastructure"
+  ],
+  "entryProject": "src/TruyenVerse.Api",
+  "rules": {
+    "ensureProjectsAddedToSolution": true,
+    "ensureProjectReferences": true,
+    "respectArchitectureLayers": true
+  }
 }
