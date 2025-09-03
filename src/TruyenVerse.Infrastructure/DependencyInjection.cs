@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TruyenVerse.Application.Interfaces;
 using TruyenVerse.Application.Interfaces.Repositories;
 using TruyenVerse.Application.Interfaces.Services;
 using TruyenVerse.Infrastructure.Persistence;
@@ -17,6 +18,7 @@ namespace TruyenVerse.Infrastructure
             services.AddDbContext<TruyenVerseDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, EfUserRepository>();
             services.AddScoped<IStoryRepository, EfStoryRepository>();
 

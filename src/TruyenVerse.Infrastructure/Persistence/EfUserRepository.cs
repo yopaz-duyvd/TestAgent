@@ -13,10 +13,13 @@ namespace TruyenVerse.Infrastructure.Persistence
             _context = context;
         }
 
-        public async Task AddAsync(User user)
+        public async Task AddAsync(User user, bool autoSave = true)
         {
             _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            if (autoSave)
+            {
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<IEnumerable<User>> GetAllAsync()
@@ -34,10 +37,13 @@ namespace TruyenVerse.Infrastructure.Persistence
             return await _context.Users.FindAsync(id);
         }
 
-        public async Task UpdateAsync(User user)
+        public async Task UpdateAsync(User user, bool autoSave = true)
         {
             _context.Users.Update(user);
-            await _context.SaveChangesAsync();
+            if (autoSave)
+            {
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }
