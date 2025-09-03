@@ -12,6 +12,7 @@ namespace TruyenVerse.Infrastructure.Persistence
         public DbSet<User> Users => Set<User>();
         public DbSet<Story> Stories => Set<Story>();
         public DbSet<Chapter> Chapters => Set<Chapter>();
+        public DbSet<StoryFollow> StoryFollows => Set<StoryFollow>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

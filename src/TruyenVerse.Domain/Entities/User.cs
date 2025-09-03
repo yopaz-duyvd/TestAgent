@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TruyenVerse.Domain.Enums;
 
 namespace TruyenVerse.Domain.Entities
@@ -12,5 +13,6 @@ namespace TruyenVerse.Domain.Entities
         public string Introduction { get; set; } = string.Empty;
         public UserRole? Role { get; set; }
         public List<Story>? Stories { get; set; }
+        public List<StoryFollow>? FollowedStories { get; set; }
     }
 }
