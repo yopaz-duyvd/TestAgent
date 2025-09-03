@@ -13,19 +13,25 @@ namespace TruyenVerse.Infrastructure.Persistence
             _context = context;
         }
 
-        public async Task AddAsync(Story story)
+        public async Task AddAsync(Story story, bool autoSave = true)
         {
             _context.Stories.Add(story);
-            await _context.SaveChangesAsync();
+            if (autoSave)
+            {
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id, bool autoSave = true)
         {
             var story = await _context.Stories.FindAsync(id);
             if (story != null)
             {
                 _context.Stories.Remove(story);
-                await _context.SaveChangesAsync();
+                if (autoSave)
+                {
+                    await _context.SaveChangesAsync();
+                }
             }
         }
 
@@ -45,10 +51,13 @@ namespace TruyenVerse.Infrastructure.Persistence
                 .FirstOrDefaultAsync(s => s.Id == id);
         }
 
-        public async Task UpdateAsync(Story story)
+        public async Task UpdateAsync(Story story, bool autoSave = true)
         {
             _context.Stories.Update(story);
-            await _context.SaveChangesAsync();
+            if (autoSave)
+            {
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

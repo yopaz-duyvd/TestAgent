@@ -39,7 +39,10 @@ public class StoryService(IStoryRepository repository) : IStoryService
         await _repository.UpdateAsync(story);
     }
 
-    public Task DeleteStoryAsync(Guid storyId) => _repository.DeleteAsync(storyId);
+    public async Task DeleteStoryAsync(Guid storyId)
+    {
+        await _repository.DeleteAsync(storyId);
+    }
 
     public async Task<Chapter> AddChapterAsync(Guid storyId, string title, string content)
     {

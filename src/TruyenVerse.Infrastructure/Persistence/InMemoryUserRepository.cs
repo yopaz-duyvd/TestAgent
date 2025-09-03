@@ -22,7 +22,7 @@ namespace TruyenVerse.Infrastructure.Persistence
             _storage[admin.Id] = admin;
         }
 
-        public Task AddAsync(User user)
+        public Task AddAsync(User user, bool autoSave = true)
         {
             _storage[user.Id] = user;
             return Task.CompletedTask;
@@ -37,7 +37,7 @@ namespace TruyenVerse.Infrastructure.Persistence
         public Task<User?> GetByEmailAsync(string email) =>
             Task.FromResult(_storage.Values.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase)));
 
-        public Task UpdateAsync(User user)
+        public Task UpdateAsync(User user, bool autoSave = true)
         {
             _storage[user.Id] = user;
             return Task.CompletedTask;
