@@ -1,4 +1,3 @@
-using Hackathon.Models;
 using Hackathon.Repositories;
 using Hackathon.Services;
 using Hackathon.UnitOfWork;
@@ -6,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Minio;
-using Minio.AspNetCore;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
