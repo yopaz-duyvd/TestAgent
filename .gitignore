@@ -236,6 +236,3 @@ artifacts/
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,dotnetcore
 
-# Ignore environment-specific configuration files
-src/TruyenVerse.Api/appsettings.Development.json
-

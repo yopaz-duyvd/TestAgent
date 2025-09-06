@@ -1,28 +1,37 @@
 {
   "language": "csharp",
   "framework": ".NET 8",
-  "architecture": "clean",
+  "architecture": "layered",
   "projectType": "webapi",
-  "entryProject": "src/TruyenVerse.Api",
+  "entryProject": "Hackathon/Hackathon",
   "projects": [
-    "src/TruyenVerse.Api",
-    "src/TruyenVerse.Application",
-    "src/TruyenVerse.Domain",
-    "src/TruyenVerse.Infrastructure"
+    "Hackathon/Hackathon"
   ],
+  "layers": {
+    "presentation": "Controllers",
+    "application": "Services",
+    "data": "Repositories",
+    "domain": "Models",
+    "infrastructure": "UnitOfWork"
+  },
   "features": {
     "useDatabase": true,
-    "databaseType": "sqlserver",
-    "useCache": true,
-    "cacheType": "redis",
+    "databaseType": "mysql",
+    "useEfCore": true,
     "useAuthentication": true,
-    "authenticationType": "jwt"
+    "authenticationType": "jwt",
+    "useDependencyInjection": true,
+    "useUnitOfWork": true,
+    "autoAddNugetPackages": true,
+    "autoUpdateCsproj": true
   },
   "rules": {
     "ensureProjectsAddedToSolution": true,
-    "ensureProjectReferences": true,
     "respectArchitectureLayers": true,
     "useEfCoreInsteadOfInMemory": true,
-    "doNotHardcodeSecrets": true
+    "enforceDependencyFlow": true,
+    "controllerShouldNotAccessRepositoryDirectly": true,
+    "serviceShouldNotDependOnPresentation": true,
+    "avoidDirectDbContextAccessInController": true
   }
 }

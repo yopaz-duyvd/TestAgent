@@ -1,20 +1,56 @@
-# Coding Style Rules (.NET 8 / C# 12)
+# Coding Style & Architecture Guidelines (.NET 8 / C# 12)
 
-- Prefer C# 12 features when appropriate:
-  - Primary constructors for immutable classes or value objects.
-  - Collection expressions like `[..items]` or `[1, 2, ..moreItems]`.
-  - `required` properties for mandatory init-only members.
-- Use `var` when the type is clear from context; avoid it for complex generics or delegates.
-- Favor expression-bodied members for simple methods or properties.
-- Keep one class, interface, or record per file.
-- Place interfaces in `Interfaces/`, `Abstractions/`, or `Contracts/` folders.
-- Keep controllers thin:
-  - No business logic inside controllers.
-  - Delegate requests to the Application layer (e.g., via CQRS handlers).
-  - For Minimal APIs, place route handlers in `Endpoints/`.
-- Use file-scoped namespaces.
-- Order members as: fields → constructors → public methods → protected methods → private methods.
-- Comment only when business logic isn't obvious or has side effects; prefer self-explanatory code.
-- Use clear naming: PascalCase for types/methods and camelCase for variables.
-- Keep methods under 20 lines; avoid more than four parameters per method (use an object if necessary).
-- Prevent infrastructure concerns from leaking into the Domain or Application layers.
+## ✅ C# 12 Conventions
+- **Sử dụng các tính năng mới của C# 12 khi phù hợp:**
+  - `required` properties cho các thuộc tính bắt buộc.
+  - Primary constructors cho các class bất biến hoặc value object.
+  - Collection expressions như `[..items]`, `[1, 2, ..moreItems]`.
+- **Ưu tiên `var`** khi kiểu dữ liệu rõ ràng từ context.
+  - ❌ Tránh dùng `var` với các kiểu phức tạp như generics hoặc delegates.
+
+## ✅ Coding Style
+- Sử dụng **file-scoped namespaces**.
+- Mỗi file chỉ nên chứa **một class, interface, hoặc record**.
+- **Thứ tự thành phần trong class**:
+  1. Fields
+  2. Constructors
+  3. Public methods
+  4. Protected methods
+  5. Private methods
+- **Quy tắc đặt tên:**
+  - PascalCase cho class, interface, method, property.
+  - camelCase cho biến và tham số.
+- Giới hạn phương thức:
+  - Dưới **20 dòng**.
+  - Tối đa **4 tham số** (sử dụng object nếu cần nhiều hơn).
+- Sử dụng **expression-bodied members** cho những method/property đơn giản.
+
+## ✅ Kiến trúc & Tổ chức thư mục (Layered Architecture)
+- Chỉ sử dụng **1 project duy nhất** với cấu trúc theo layer:
+  - `Controllers/`: Giao tiếp HTTP
+  - `Services/`: Xử lý nghiệp vụ
+  - `Repositories/`: Truy cập dữ liệu
+  - `UnitOfWork/`: Quản lý transaction
+  - `Models/`: Domain Entities
+- Đặt interface trong `Interfaces/`, `Abstractions/`, hoặc `Contracts/`.
+
+## ✅ Quy tắc cho Controllers
+- **Giữ controller mỏng (thin controller)**:
+  - ❌ Không chứa logic nghiệp vụ.
+  - ✅ Gọi Service Layer để xử lý chính.
+  - Sử dụng DTO cho input/output.
+- Không sử dụng **Minimal API**.
+
+## ✅ Quy tắc cho Business Logic
+- Logic nghiệp vụ chỉ nằm trong **Service Layer**.
+- Repository chỉ chịu trách nhiệm truy xuất dữ liệu.
+- Sử dụng **Dependency Injection** để inject service, repository, và unit of work.
+- Không cho phép code hạ tầng (như `DbContext`) xuất hiện trong domain hoặc services.
+
+## ✅ Bình luận và Đọc hiểu
+- Code nên **tự giải thích**.
+- Chỉ thêm comment khi:
+  - Logic phức tạp, khó hiểu.
+  - Có side effect hoặc quyết định kỹ thuật cần làm rõ.
+- ❌ Không comment những điều hiển nhiên; viết code rõ ràng hơn.
+
