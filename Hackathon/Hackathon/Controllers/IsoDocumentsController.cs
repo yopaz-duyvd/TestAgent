@@ -19,6 +19,13 @@ public class IsoDocumentsController : ControllerBase
         _service = service;
     }
 
+    [HttpGet("year/{year:int}")]
+    public async Task<IActionResult> GetByYear(int year)
+    {
+        var documents = await _service.GetByYearAsync(year);
+        return Ok(documents);
+    }
+
     [HttpPost]
     [RequestSizeLimit(1L * 1024 * 1024 * 1024)]
     public async Task<IActionResult> Upload([FromForm] UploadIsoDocumentRequest request)

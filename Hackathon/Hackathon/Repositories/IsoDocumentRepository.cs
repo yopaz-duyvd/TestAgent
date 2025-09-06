@@ -3,6 +3,8 @@ namespace Hackathon.Repositories;
 using Hackathon.Models;
 using Hackathon.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 
 public class IsoDocumentRepository(AppDbContext context) : IIsoDocumentRepository
 {
@@ -11,4 +13,7 @@ public class IsoDocumentRepository(AppDbContext context) : IIsoDocumentRepositor
 
     public async Task AddAsync(IsoDocument document) =>
         await context.IsoDocuments.AddAsync(document);
+
+    public async Task<IEnumerable<IsoDocument>> GetByYearAsync(int year) =>
+        await context.IsoDocuments.Where(d => d.Year == year).ToListAsync();
 }

@@ -5,6 +5,7 @@ using Hackathon.Models.Dtos;
 using Hackathon.UnitOfWork;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 public class IsoDocumentService(IUnitOfWork unitOfWork, IFileService fileService) : IIsoDocumentService
 {
@@ -53,4 +54,7 @@ public class IsoDocumentService(IUnitOfWork unitOfWork, IFileService fileService
 
         return document;
     }
+
+    public async Task<IEnumerable<IsoDocument>> GetByYearAsync(int year) =>
+        await _unitOfWork.IsoDocuments.GetByYearAsync(year);
 }
