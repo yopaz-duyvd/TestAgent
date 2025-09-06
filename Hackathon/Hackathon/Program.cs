@@ -20,10 +20,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IIsoDocumentRepository, IsoDocumentRepository>();
 builder.Services.AddScoped<IApprovedApplicationRepository, ApprovedApplicationRepository>();
+
+builder.Services.AddScoped<IDeviceScanRepository, DeviceScanRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IIsoDocumentService, IsoDocumentService>();
 builder.Services.AddScoped<IApprovedApplicationService, ApprovedApplicationService>();
+builder.Services.AddScoped<IDeviceScanService, DeviceScanService>();
 builder.Services.AddMinio(config =>
 {
     config.WithEndpoint(builder.Configuration["Minio:Endpoint"]!)
