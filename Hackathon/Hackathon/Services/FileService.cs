@@ -5,14 +5,9 @@ using Minio;
 using Minio.DataModel.Args;
 using System.IO;
 
-public class FileService(IConfiguration configuration) : IFileService
+public class FileService(IMinioClient client, IConfiguration configuration) : IFileService
 {
-    private readonly MinioClient _client = new MinioClient()
-        .WithEndpoint(configuration["Minio:Endpoint"]!)
-        .WithCredentials(configuration["Minio:AccessKey"], configuration["Minio:SecretKey"])
-        .WithSSL(bool.Parse(configuration["Minio:UseSSL"] ?? "false"))
-        .Build();
-
+    private readonly IMinioClient _client = client;
     private readonly string _bucketName = configuration["Minio:BucketName"]!;
 
     public async Task<string> UploadFileAsync(IFormFile file)

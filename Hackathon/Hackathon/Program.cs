@@ -5,6 +5,8 @@ using Hackathon.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Minio;
+using Minio.AspNetCore;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +22,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddMinio(config =>
+{
+    config.WithEndpoint(builder.Configuration["Minio:Endpoint"]!)
+          .WithCredentials(builder.Configuration["Minio:AccessKey"], builder.Configuration["Minio:SecretKey"])
+          .WithSSL(bool.Parse(builder.Configuration["Minio:UseSSL"] ?? "false"));
+});
 builder.Services.AddScoped<IFileService, FileService>();
 
 var jwtSection = builder.Configuration.GetSection("Jwt");
