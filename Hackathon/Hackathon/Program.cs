@@ -18,8 +18,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IIsoDocumentRepository, IsoDocumentRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IIsoDocumentService, IsoDocumentService>();
 builder.Services.AddMinio(config =>
 {
     config.WithEndpoint(builder.Configuration["Minio:Endpoint"]!)
@@ -47,6 +49,12 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = jwtSection["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(key)
     };
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOrAnalyst", policy =>
+        policy.RequireRole("admin", "analyst"));
 });
 
 var app = builder.Build();

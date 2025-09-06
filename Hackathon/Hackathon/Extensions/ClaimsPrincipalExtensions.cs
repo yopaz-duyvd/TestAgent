@@ -16,5 +16,15 @@ public static class ClaimsPrincipalExtensions
             ? userId
             : null;
     }
+
+    public static string? GetUserRole(this ClaimsPrincipal user)
+    {
+        if (user.Identity?.IsAuthenticated != true)
+        {
+            return null;
+        }
+
+        return user.FindFirst(ClaimTypes.Role)?.Value;
+    }
 }
 
