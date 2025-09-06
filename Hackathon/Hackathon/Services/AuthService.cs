@@ -10,32 +10,21 @@ using System.Text;
 
 public class AuthService(IUnitOfWork unitOfWork, IConfiguration configuration) : IAuthService
 {
-    public async Task RegisterAsync(string username, string password)
+    public async Task<string> LoginWithGoogleAsync(string email, string clientId)
     {
-        var existing = await unitOfWork.Users.GetByUsernameAsync(username);
-        if (existing is not null)
+        var user = await unitOfWork.Users.GetByEmailAsync(email);
+        if (user is null)
         {
-            throw new InvalidOperationException("User exists");
+            user = new User
+            {
+                Email = email,
+                SsoProvider = "Google",
+                SsoId = clientId,
+                Role = "user"
+            };
+            await unitOfWork.Users.AddAsync(user);
+            await unitOfWork.SaveChangesAsync();
         }
-
-        var user = new User
-        {
-            Username = username,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(password)
-        };
-
-        await unitOfWork.Users.AddAsync(user);
-        await unitOfWork.SaveChangesAsync();
-    }
-
-    public async Task<string?> LoginAsync(string username, string password)
-    {
-        var user = await unitOfWork.Users.GetByUsernameAsync(username);
-        if (user is null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
-        {
-            return null;
-        }
-
         return GenerateToken(user);
     }
 
@@ -45,17 +34,17 @@ public class AuthService(IUnitOfWork unitOfWork, IConfiguration configuration) :
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(ClaimTypes.Role, user.Role)
         };
         var token = new JwtSecurityToken(
             issuer: configuration["Jwt:Issuer"],
             audience: configuration["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddHours(1),
+            expires: DateTime.UtcNow.AddDays(30),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }
-
