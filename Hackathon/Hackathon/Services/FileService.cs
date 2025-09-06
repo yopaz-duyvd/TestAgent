@@ -3,12 +3,15 @@ namespace Hackathon.Services;
 using Microsoft.AspNetCore.Http;
 using Minio;
 using Minio.DataModel.Args;
+using System;
 using System.IO;
+using System.Linq;
 
 public class FileService(IMinioClient client, IConfiguration configuration) : IFileService
 {
     private readonly IMinioClient _client = client;
     private readonly string _bucketName = configuration["Minio:BucketName"]!;
+    private static readonly int _presignedUrlExpirySeconds = (int)Math.Min(TimeSpan.FromDays(365 * 100).TotalSeconds, int.MaxValue);
 
     public async Task<string> UploadFileAsync(IFormFile file)
     {
@@ -21,11 +24,16 @@ public class FileService(IMinioClient client, IConfiguration configuration) : IF
             .WithStreamData(stream)
             .WithObjectSize(stream.Length)
             .WithContentType(file.ContentType));
-        return $"{_bucketName}/{objectName}";
+        return await _client.PresignedGetObjectAsync(new PresignedGetObjectArgs()
+            .WithBucket(_bucketName)
+            .WithObject(objectName)
+            .WithExpiry(_presignedUrlExpirySeconds));
     }
 
-    public async Task DeleteFileAsync(string objectName)
+    public async Task DeleteFileAsync(string fileUrl)
     {
+        var uri = new Uri(fileUrl);
+        var objectName = uri.AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries).Last();
         await _client.RemoveObjectAsync(new RemoveObjectArgs()
             .WithBucket(_bucketName)
             .WithObject(objectName));
@@ -40,4 +48,3 @@ public class FileService(IMinioClient client, IConfiguration configuration) : IF
         }
     }
 }
-
