@@ -34,6 +34,15 @@ public class FileService(IMinioClient client, IConfiguration configuration) : IF
             .WithObject(objectName));
     }
 
+    public async Task<string> GetPresignedUrlAsync(string fileUrl, int expiryInSeconds)
+    {
+        var objectName = fileUrl.Split('/', StringSplitOptions.RemoveEmptyEntries).Last();
+        return await _client.PresignedGetObjectAsync(new PresignedGetObjectArgs()
+            .WithBucket(_bucketName)
+            .WithObject(objectName)
+            .WithExpiry(expiryInSeconds));
+    }
+
     private async Task EnsureBucketExistsAsync()
     {
         var bucketExists = await _client.BucketExistsAsync(new BucketExistsArgs().WithBucket(_bucketName));

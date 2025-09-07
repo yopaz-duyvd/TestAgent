@@ -16,11 +16,14 @@ namespace Hackathon.Controllers;
 [Authorize(Policy = "AdminOrAnalyst")]
 public class IsoDocumentsController : ControllerBase
 {
+    private const int SevenDaysInSeconds = 60 * 60 * 24 * 7;
     private readonly IIsoDocumentService _service;
+    private readonly IFileService _fileService;
 
-    public IsoDocumentsController(IIsoDocumentService service)
+    public IsoDocumentsController(IIsoDocumentService service, IFileService fileService)
     {
         _service = service;
+        _fileService = fileService;
     }
 
     /// <summary>
@@ -34,6 +37,13 @@ public class IsoDocumentsController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var docs = await _service.GetAllAsync();
+        foreach (var doc in docs)
+        {
+            foreach (var file in doc.Files)
+            {
+                file.FilePath = await _fileService.GetPresignedUrlAsync(file.FilePath, SevenDaysInSeconds);
+            }
+        }
         return Ok(docs);
     }
 
@@ -53,6 +63,10 @@ public class IsoDocumentsController : ControllerBase
         {
             return NotFound();
         }
+        foreach (var file in doc.Files)
+        {
+            file.FilePath = await _fileService.GetPresignedUrlAsync(file.FilePath, SevenDaysInSeconds);
+        }
         return Ok(doc);
     }
 
@@ -67,6 +81,13 @@ public class IsoDocumentsController : ControllerBase
     public async Task<IActionResult> GetByYear(int year)
     {
         var documents = await _service.GetByYearAsync(year);
+        foreach (var doc in documents)
+        {
+            foreach (var file in doc.Files)
+            {
+                file.FilePath = await _fileService.GetPresignedUrlAsync(file.FilePath, SevenDaysInSeconds);
+            }
+        }
         return Ok(documents);
     }
 
@@ -85,6 +106,10 @@ public class IsoDocumentsController : ControllerBase
         if (files == null)
         {
             return NotFound();
+        }
+        foreach (var file in files)
+        {
+            file.FilePath = await _fileService.GetPresignedUrlAsync(file.FilePath, SevenDaysInSeconds);
         }
         return Ok(files);
     }
