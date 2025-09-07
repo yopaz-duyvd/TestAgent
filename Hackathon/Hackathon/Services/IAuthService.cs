@@ -2,6 +2,6 @@ namespace Hackathon.Services;
 
 public interface IAuthService
 {
-    Task<string> LoginWithGoogleAsync(string email, string clientId);
+    Task<string> LoginAsync(string email, string password);
 }
 

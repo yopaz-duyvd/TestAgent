@@ -10,5 +10,7 @@ public class UserRepository(AppDbContext context) : IUserRepository
         await context.Users.SingleOrDefaultAsync(u => u.Email == email);
 
     public async Task AddAsync(User user) => await context.Users.AddAsync(user);
+
+    public void Update(User user) => context.Users.Update(user);
 }
 

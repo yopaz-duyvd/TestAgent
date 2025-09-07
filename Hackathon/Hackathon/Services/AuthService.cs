@@ -10,20 +10,12 @@ using System.Text;
 
 public class AuthService(IUnitOfWork unitOfWork, IConfiguration configuration) : IAuthService
 {
-    public async Task<string> LoginWithGoogleAsync(string email, string clientId)
+    public async Task<string> LoginAsync(string email, string password)
     {
         var user = await unitOfWork.Users.GetByEmailAsync(email);
-        if (user is null)
+        if (user is null || user.Password != password)
         {
-            user = new User
-            {
-                Email = email,
-                SsoProvider = "Google",
-                SsoId = clientId,
-                Role = "user"
-            };
-            await unitOfWork.Users.AddAsync(user);
-            await unitOfWork.SaveChangesAsync();
+            throw new UnauthorizedAccessException();
         }
         return GenerateToken(user);
     }
