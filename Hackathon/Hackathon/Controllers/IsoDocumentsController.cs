@@ -167,6 +167,25 @@ public class IsoDocumentsController : ControllerBase
     }
 
     /// <summary>
+    /// Resets the scan time of an ISO document.
+    /// </summary>
+    [HttpPost("{id:long}/reset-scan")]
+    [SwaggerOperation(Summary = "Resets scan time of an ISO document.", Description = "Sets the scanned timestamp of the specified ISO document to null.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> ResetScan(long id)
+    {
+        var success = await _service.ResetScanAsync(id);
+        if (!success)
+        {
+            return NotFound();
+        }
+        return NoContent();
+    }
+
+    /// <summary>
     /// Uploads files to an existing ISO document.
     /// </summary>
     [HttpPost("{id:long}/upload")]

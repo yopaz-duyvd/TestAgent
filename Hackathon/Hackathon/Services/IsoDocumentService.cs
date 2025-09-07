@@ -76,6 +76,18 @@ public class IsoDocumentService(IUnitOfWork unitOfWork, IFileService fileService
         return true;
     }
 
+    public async Task<bool> ResetScanAsync(long id)
+    {
+        var document = await _unitOfWork.IsoDocuments.GetByIdAsync(id);
+        if (document == null)
+        {
+            return false;
+        }
+        document.ScannedAt = null;
+        await _unitOfWork.SaveChangesAsync();
+        return true;
+    }
+
     public async Task<IsoDocument> UploadAsync(long documentId, UploadIsoDocumentRequest request, long uploaderId)
     {
         if (request.Files.Sum(f => f.Length) > MaxRequestSize)

@@ -11,6 +11,7 @@ public interface IIsoDocumentService
     Task<bool> UpdateAsync(long id, IsoDocumentRequest request);
     Task<bool> DeleteAsync(long id);
     Task<bool> EnableAsync(long id);
+    Task<bool> ResetScanAsync(long id);
     Task<IsoDocument> UploadAsync(long documentId, UploadIsoDocumentRequest request, long uploaderId);
     Task<IEnumerable<IsoDocument>> GetByYearAsync(int year);
     Task<IEnumerable<IsoFile>?> GetFilesAsync(long documentId);
