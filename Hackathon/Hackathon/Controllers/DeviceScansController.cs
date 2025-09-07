@@ -33,5 +33,23 @@ public class DeviceScansController(IDeviceScanService service) : ControllerBase
         var scan = await service.ScanAsync(request, userId.Value);
         return Ok(new { scan.Id });
     }
+
+    /// <summary>
+    /// Retrieves scan history for the authenticated user.
+    /// </summary>
+    /// <returns>List of device scans.</returns>
+    [HttpGet]
+    [SwaggerOperation(Summary = "Gets scan history.", Description = "Returns device scans for the authenticated user.")]
+    public async Task<IActionResult> GetHistory()
+    {
+        var userId = User.GetUserId();
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
+
+        var scans = await service.GetHistoryAsync(userId.Value);
+        return Ok(scans);
+    }
 }
 
