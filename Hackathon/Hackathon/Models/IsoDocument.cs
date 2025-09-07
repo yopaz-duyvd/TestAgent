@@ -8,6 +8,7 @@ public class IsoDocument
     public long? UploadedBy { get; set; }
     public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
     public string? Notes { get; set; }
+    public bool IsActive { get; set; }
 
     public User? Uploader { get; set; }
     public ICollection<IsoFile> Files { get; set; } = new List<IsoFile>();
