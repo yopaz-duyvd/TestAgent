@@ -9,5 +9,7 @@ public interface IUserRepository
     Task AddAsync(User user);
     void Update(User user);
     Task<IEnumerable<UserScanSummaryResponse>> GetUsersWithLastScanAsync();
+    Task<int> CountAsync();
+    Task<int> CountUsersWithLatestScanViolationAsync();
 }
 

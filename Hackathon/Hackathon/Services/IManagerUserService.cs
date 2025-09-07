@@ -8,4 +8,5 @@ public interface IManagerUserService
 {
     Task<IEnumerable<UserScanSummaryResponse>> GetUsersWithLastScanAsync();
     Task<UserScanHistoryResponse> GetUserScanHistoryAsync(long userId);
+    Task<ManagerStatsResponse> GetStatsAsync();
 }
