@@ -5,6 +5,12 @@ using Hackathon.Models.Dtos;
 
 public interface IIsoDocumentService
 {
-    Task<IsoDocument> UploadAsync(UploadIsoDocumentRequest request, long uploaderId);
+    Task<IsoDocument> CreateAsync(IsoDocumentRequest request, long uploaderId);
+    Task<IEnumerable<IsoDocument>> GetAllAsync();
+    Task<IsoDocument?> GetByIdAsync(long id);
+    Task<bool> UpdateAsync(long id, IsoDocumentRequest request);
+    Task<bool> DeleteAsync(long id);
+    Task<bool> EnableAsync(long id);
+    Task<IsoDocument> UploadAsync(long documentId, UploadIsoDocumentRequest request, long uploaderId);
     Task<IEnumerable<IsoDocument>> GetByYearAsync(int year);
 }
