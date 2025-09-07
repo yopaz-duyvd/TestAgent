@@ -12,7 +12,7 @@ public class IsoDocument
     [Column("year")]
     public int Year { get; set; }
     [Column("uploaded_by")]
-    public long? UploadedBy { get; set; }
+    public long? UploaderId { get; set; }
     [Column("uploaded_at")]
     public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
     [Column("notes")]
