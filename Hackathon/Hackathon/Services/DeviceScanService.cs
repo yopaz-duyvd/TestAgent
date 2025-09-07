@@ -3,6 +3,7 @@ namespace Hackathon.Services;
 using Hackathon.Models;
 using Hackathon.Models.Dtos;
 using System.Linq;
+using System.Text.Json;
 using Hackathon.UnitOfWork;
 
 public class DeviceScanService(IUnitOfWork unitOfWork) : IDeviceScanService
@@ -11,17 +12,19 @@ public class DeviceScanService(IUnitOfWork unitOfWork) : IDeviceScanService
 
     public async Task<DeviceScan> ScanAsync(DeviceScanRequest request, long userId)
     {
+        var applications = request.ScannedApplications
+            .Where(a => !string.Equals(a.Provider, "Apple Inc.", StringComparison.OrdinalIgnoreCase))
+            .Select(a => new ScannedApplication
+            {
+                AppName = a.Name,
+                Vendor = a.Provider
+            }).ToList();
+
         var scan = new DeviceScan
         {
             UserId = userId,
-            DeviceInfo = request.DeviceInfo,
-            ScannedApplications = request.ScannedApplications
-                .Select(a => new ScannedApplication
-                {
-                    AppName = a.AppName,
-                    AppVersion = a.AppVersion,
-                    Vendor = a.Vendor
-                }).ToList()
+            SystemInfo = JsonSerializer.Serialize(request.SystemInfo),
+            ScannedApplications = applications
         };
 
         await _unitOfWork.DeviceScans.AddAsync(scan);

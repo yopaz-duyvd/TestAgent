@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class DeviceScanRequest
 {
-    public string? DeviceInfo { get; set; }
+    public required SystemInfo SystemInfo { get; set; }
     public IList<ScannedApplicationRequest> ScannedApplications { get; set; } = new List<ScannedApplicationRequest>();
 }
 
