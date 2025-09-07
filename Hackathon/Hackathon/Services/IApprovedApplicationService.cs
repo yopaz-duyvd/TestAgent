@@ -8,7 +8,7 @@ public interface IApprovedApplicationService
 {
     Task<IEnumerable<ApprovedApplication>> GetAllAsync();
     Task<ApprovedApplication?> GetByIdAsync(long id);
-    Task<IEnumerable<ApprovedApplication>> GetByIsoDocumentIdAsync(long isoDocumentId);
+    Task<IEnumerable<ApprovedApplication>> GetWhitelistAsync();
     Task<ApprovedApplication> CreateAsync(ApprovedApplicationRequest request);
     Task<bool> UpdateAsync(long id, ApprovedApplicationRequest request);
     Task<bool> DeleteAsync(long id);
