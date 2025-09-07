@@ -3,9 +3,11 @@ namespace Hackathon.Services;
 using Hackathon.Models;
 using Hackathon.Models.Dtos;
 using Hackathon.UnitOfWork;
+using Microsoft.AspNetCore.Http;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.IO;
 
 public class IsoDocumentService(IUnitOfWork unitOfWork, IFileService fileService) : IIsoDocumentService
 {
@@ -114,7 +116,7 @@ public class IsoDocumentService(IUnitOfWork unitOfWork, IFileService fileService
             document.Files.Add(new IsoFile
             {
                 FilePath = path,
-                FileType = file.ContentType
+                FileType = MapFileType(file)
             });
         }
 
@@ -134,5 +136,17 @@ public class IsoDocumentService(IUnitOfWork unitOfWork, IFileService fileService
 
     public async Task<IEnumerable<IsoDocument>> GetByYearAsync(int year) =>
         await _unitOfWork.IsoDocuments.GetByYearAsync(year);
+
+    private static string MapFileType(IFormFile file)
+    {
+        var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+        return extension switch
+        {
+            ".pdf" => "pdf",
+            ".doc" or ".docx" => "doc",
+            ".xls" or ".xlsx" => "excel",
+            _ => "other"
+        };
+    }
 }
 
