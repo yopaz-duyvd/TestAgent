@@ -5,7 +5,7 @@ public class DeviceScan
     public long Id { get; set; }
     public long UserId { get; set; }
     public DateTime ScannedAt { get; set; } = DateTime.UtcNow;
-    public string? SystemInfo { get; set; }
+    public string? DeviceInfo { get; set; }
 
     public User? User { get; set; }
     public ICollection<ScannedApplication> ScannedApplications { get; set; } = new List<ScannedApplication>();

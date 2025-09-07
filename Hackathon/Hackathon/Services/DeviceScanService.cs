@@ -2,9 +2,9 @@ namespace Hackathon.Services;
 
 using Hackathon.Models;
 using Hackathon.Models.Dtos;
+using Hackathon.UnitOfWork;
 using System.Linq;
 using System.Text.Json;
-using Hackathon.UnitOfWork;
 
 public class DeviceScanService(IUnitOfWork unitOfWork) : IDeviceScanService
 {
@@ -23,7 +23,7 @@ public class DeviceScanService(IUnitOfWork unitOfWork) : IDeviceScanService
         var scan = new DeviceScan
         {
             UserId = userId,
-            SystemInfo = JsonSerializer.Serialize(request.SystemInfo),
+            DeviceInfo = JsonSerializer.Serialize(request.SystemInfo),
             ScannedApplications = applications
         };
 
