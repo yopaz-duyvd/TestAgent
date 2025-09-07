@@ -34,7 +34,7 @@ public class DeviceScansController(IDeviceScanService service) : ControllerBase
         }
 
         var scan = await service.ScanAsync(request, userId.Value);
-        return Ok(new { scan.Id });
+        return Ok(scan.Id);
     }
 
     /// <summary>

@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
 using Hackathon.Extensions;
 using Hackathon.Models;
 using Hackathon.Models.Dtos;
 using Hackathon.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -50,7 +47,7 @@ public class IsoDocumentsController : ControllerBase
     [HttpPost]
     [RequestSizeLimit(1L * 1024 * 1024 * 1024)]
     [SwaggerOperation(Summary = "Uploads a new ISO document.", Description = "Stores a new ISO document and returns its identifier and version.")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IsoDocument))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -65,7 +62,7 @@ public class IsoDocumentsController : ControllerBase
         try
         {
             var document = await _service.UploadAsync(request, userId.Value);
-            return Ok(new { document.Id, document.Version });
+            return Ok(document);
         }
         catch (InvalidOperationException ex)
         {
