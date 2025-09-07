@@ -11,7 +11,7 @@ public static class ClaimsPrincipalExtensions
             return null;
         }
 
-        var claim = user.FindFirst(ClaimTypes.NameIdentifier);
+        var claim = user.FindFirst("userId");
         return claim != null && long.TryParse(claim.Value, out var userId)
             ? userId
             : null;
@@ -24,7 +24,7 @@ public static class ClaimsPrincipalExtensions
             return null;
         }
 
-        return user.FindFirst(ClaimTypes.Role)?.Value;
+        return user.FindFirst("role")?.Value;
     }
 }
 

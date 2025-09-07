@@ -27,8 +27,9 @@ public class AuthService(IUnitOfWork unitOfWork, IConfiguration configuration) :
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+            new Claim("userId", user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Role, user.Role)
+            new Claim("role", user.Role)
         };
         var token = new JwtSecurityToken(
             issuer: configuration["Jwt:Issuer"],
