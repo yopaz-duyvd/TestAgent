@@ -45,4 +45,19 @@ public class ManagerUserController(IManagerUserService managerUserService) : Con
         var history = await managerUserService.GetUserScanHistoryAsync(userId);
         return Ok(history);
     }
+
+    /// <summary>
+    /// Retrieves user statistics.
+    /// </summary>
+    /// <returns>Total user count and count of users whose latest scans contain violations.</returns>
+    [HttpGet("stats")]
+    [SwaggerOperation(Summary = "Retrieves user statistics.", Description = "Gets total number of users and number of users with violations in their latest scan.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ManagerStatsResponse))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> GetStats()
+    {
+        var stats = await managerUserService.GetStatsAsync();
+        return Ok(stats);
+    }
 }

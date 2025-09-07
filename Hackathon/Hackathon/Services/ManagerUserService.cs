@@ -45,4 +45,16 @@ public class ManagerUserService(IUnitOfWork unitOfWork) : IManagerUserService
             LatestStatus = latest?.Violations.FirstOrDefault()?.Status
         };
     }
+
+    public async Task<ManagerStatsResponse> GetStatsAsync()
+    {
+        var totalUsers = await _unitOfWork.Users.CountAsync();
+        var violationUsers = await _unitOfWork.Users.CountUsersWithLatestScanViolationAsync();
+
+        return new ManagerStatsResponse
+        {
+            TotalUsers = totalUsers,
+            UsersWithViolations = violationUsers
+        };
+    }
 }

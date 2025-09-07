@@ -41,5 +41,18 @@ public class UserRepository(AppDbContext context) : IUserRepository
             })
             .ToListAsync();
     }
+
+    public async Task<int> CountAsync() => await context.Users.CountAsync();
+
+    public async Task<int> CountUsersWithLatestScanViolationAsync()
+    {
+        return await context.Users
+            .Where(u => context.DeviceScans
+                .Where(ds => ds.UserId == u.Id)
+                .OrderByDescending(ds => ds.ScannedAt)
+                .Take(1)
+                .Any(ds => ds.Violations.Any()))
+            .CountAsync();
+    }
 }
 
