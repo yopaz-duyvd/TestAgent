@@ -15,14 +15,14 @@ public class ApprovedApplicationService(IUnitOfWork unitOfWork) : IApprovedAppli
     public async Task<ApprovedApplication?> GetByIdAsync(long id) =>
         await _unitOfWork.ApprovedApplications.GetByIdAsync(id);
 
-    public async Task<IEnumerable<ApprovedApplication>> GetByIsoDocumentIdAsync(long isoDocumentId) =>
-        await _unitOfWork.ApprovedApplications.GetByIsoDocumentIdAsync(isoDocumentId);
+    public async Task<IEnumerable<ApprovedApplication>> GetWhitelistAsync() =>
+        await _unitOfWork.ApprovedApplications.GetWhitelistAsync();
 
     public async Task<ApprovedApplication> CreateAsync(ApprovedApplicationRequest request)
     {
         var application = new ApprovedApplication
         {
-            IsoDocumentId = request.IsoDocumentId,
+            IsoFileId = request.IsoFileId,
             AppName = request.AppName,
             AppVersion = request.AppVersion,
             Vendor = request.Vendor,
@@ -42,7 +42,7 @@ public class ApprovedApplicationService(IUnitOfWork unitOfWork) : IApprovedAppli
             return false;
         }
 
-        application.IsoDocumentId = request.IsoDocumentId;
+        application.IsoFileId = request.IsoFileId;
         application.AppName = request.AppName;
         application.AppVersion = request.AppVersion;
         application.Vendor = request.Vendor;

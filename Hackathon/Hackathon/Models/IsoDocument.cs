@@ -12,5 +12,4 @@ public class IsoDocument
 
     public User? Uploader { get; set; }
     public ICollection<IsoFile> Files { get; set; } = new List<IsoFile>();
-    public ICollection<ApprovedApplication> ApprovedApplications { get; set; } = new List<ApprovedApplication>();
 }

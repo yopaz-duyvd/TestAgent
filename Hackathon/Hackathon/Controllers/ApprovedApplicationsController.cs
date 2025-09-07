@@ -27,15 +27,14 @@ public class ApprovedApplicationsController(IApprovedApplicationService service)
     }
 
     /// <summary>
-    /// Retrieves approved applications by ISO document identifier.
+    /// Retrieves approved applications that compose the whitelist.
     /// </summary>
-    /// <param name="isoDocumentId">The ISO document identifier.</param>
-    /// <returns>Approved applications associated with the ISO document.</returns>
-    [HttpGet("iso-document/{isoDocumentId:long}")]
-    [SwaggerOperation(Summary = "Retrieves approved applications by ISO document.", Description = "Returns approved applications linked to a specified ISO document identifier.")]
-    public async Task<IActionResult> GetByIsoDocument(long isoDocumentId)
+    /// <returns>Whitelist of approved applications.</returns>
+    [HttpGet("whitelist")]
+    [SwaggerOperation(Summary = "Retrieves whitelist.", Description = "Gets applications manually approved or linked to the active ISO document.")]
+    public async Task<IActionResult> GetWhitelist()
     {
-        var apps = await service.GetByIsoDocumentIdAsync(isoDocumentId);
+        var apps = await service.GetWhitelistAsync();
         return Ok(apps);
     }
 
