@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Hackathon.Models;
 
+[Table("email_notifications")]
 public class EmailNotification
 {
     public long Id { get; set; }

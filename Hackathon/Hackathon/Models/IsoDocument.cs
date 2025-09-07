@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Hackathon.Models;
 
+[Table("iso_documents")]
 public class IsoDocument
 {
     public long Id { get; set; }

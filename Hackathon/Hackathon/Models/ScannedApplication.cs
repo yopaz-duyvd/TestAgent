@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Hackathon.Models;
 
+[Table("scanned_applications")]
 public class ScannedApplication
 {
     public long Id { get; set; }

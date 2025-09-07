@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Hackathon.Models;
 
+[Table("violation_details")]
 public class ViolationDetail
 {
     public long Id { get; set; }
