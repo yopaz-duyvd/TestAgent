@@ -37,6 +37,11 @@ public class UserRepository(AppDbContext context) : IUserRepository
                     .Where(ds => ds.UserId == u.Id)
                     .OrderByDescending(ds => ds.ScannedAt)
                     .Select(ds => ds.ScannedApplications.Count(sa => sa.IsApproved == true))
+                    .FirstOrDefault(),
+                TotalApplicationCount = context.DeviceScans
+                    .Where(ds => ds.UserId == u.Id)
+                    .OrderByDescending(ds => ds.ScannedAt)
+                    .Select(ds => ds.ScannedApplications.Count())
                     .FirstOrDefault()
             })
             .ToListAsync();
