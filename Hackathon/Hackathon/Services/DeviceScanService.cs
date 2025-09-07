@@ -5,6 +5,7 @@ using Hackathon.Models.Dtos;
 using Hackathon.UnitOfWork;
 using System.Linq;
 using System.Text.Json;
+using System.Collections.Generic;
 
 public class DeviceScanService(IUnitOfWork unitOfWork) : IDeviceScanService
 {
@@ -30,6 +31,39 @@ public class DeviceScanService(IUnitOfWork unitOfWork) : IDeviceScanService
         await _unitOfWork.DeviceScans.AddAsync(scan);
         await _unitOfWork.SaveChangesAsync();
         return scan;
+    }
+
+    public async Task<IEnumerable<DeviceScanResponse>> GetHistoryAsync(long userId)
+    {
+        var scans = await _unitOfWork.DeviceScans.GetByUserIdAsync(userId);
+
+        return scans.Select(scan => new DeviceScanResponse
+        {
+            Id = scan.Id,
+            ScannedAt = scan.ScannedAt,
+            DeviceInfo = scan.DeviceInfo,
+            ScannedApplications = scan.ScannedApplications.Select(app => new ScannedApplicationResponse
+            {
+                Id = app.Id,
+                AppName = app.AppName,
+                AppVersion = app.AppVersion,
+                Vendor = app.Vendor,
+                IsApproved = app.IsApproved,
+                CheckedAt = app.CheckedAt
+            }).ToList(),
+            Violations = scan.Violations.Select(v => new ViolationResponse
+            {
+                Id = v.Id,
+                TotalViolations = v.TotalViolations,
+                Status = v.Status,
+                CreatedAt = v.CreatedAt,
+                Details = v.Details.Select(d => new ViolationDetailResponse
+                {
+                    Id = d.Id,
+                    ScannedAppId = d.ScannedAppId
+                }).ToList()
+            }).ToList()
+        }).ToList();
     }
 }
 
