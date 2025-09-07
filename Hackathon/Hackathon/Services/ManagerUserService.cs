@@ -3,7 +3,7 @@ namespace Hackathon.Services;
 using Hackathon.Models.Dtos;
 using Hackathon.UnitOfWork;
 
-public class UserService(IUnitOfWork unitOfWork) : IUserService
+public class ManagerUserService(IUnitOfWork unitOfWork) : IManagerUserService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 

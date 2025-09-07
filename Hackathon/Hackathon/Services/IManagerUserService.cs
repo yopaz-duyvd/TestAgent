@@ -4,7 +4,7 @@ using Hackathon.Models.Dtos;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-public interface IUserService
+public interface IManagerUserService
 {
     Task<IEnumerable<UserScanSummaryResponse>> GetUsersWithLastScanAsync();
 }
