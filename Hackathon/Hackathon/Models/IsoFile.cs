@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Hackathon.Models;
 
+[Table("iso_files")]
 public class IsoFile
 {
     public long Id { get; set; }

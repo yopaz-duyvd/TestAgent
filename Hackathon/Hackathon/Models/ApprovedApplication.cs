@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Hackathon.Models;
 
+[Table("approved_applications")]
 public class ApprovedApplication
 {
     public long Id { get; set; }

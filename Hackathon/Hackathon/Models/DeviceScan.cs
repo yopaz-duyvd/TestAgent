@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Hackathon.Models;
 
+[Table("device_scans")]
 public class DeviceScan
 {
     public long Id { get; set; }
