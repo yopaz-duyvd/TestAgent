@@ -1,9 +1,7 @@
-using System.Collections.Generic;
 using Hackathon.Extensions;
 using Hackathon.Models.Dtos;
 using Hackathon.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -24,7 +22,7 @@ public class DeviceScansController(IDeviceScanService service) : ControllerBase
     /// <returns>The identifier of the created scan.</returns>
     [HttpPost]
     [SwaggerOperation(Summary = "Submits a device scan.", Description = "Registers a new device scan for the authenticated user.")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(long))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Scan(DeviceScanRequest request)
