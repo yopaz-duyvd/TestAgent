@@ -91,7 +91,7 @@ public class IsoDocumentService(IUnitOfWork unitOfWork, IFileService fileService
             }
         }
 
-        var document = await _unitOfWork.IsoDocuments.GetByIdAsync(documentId)
+        var document = await _unitOfWork.IsoDocuments.GetByIdWithFilesAsync(documentId)
             ?? throw new InvalidOperationException("ISO document not found.");
 
         document.UploaderId ??= uploaderId;
@@ -108,6 +108,16 @@ public class IsoDocumentService(IUnitOfWork unitOfWork, IFileService fileService
 
         await _unitOfWork.SaveChangesAsync();
         return document;
+    }
+
+    public async Task<IEnumerable<IsoFile>?> GetFilesAsync(long documentId)
+    {
+        var document = await _unitOfWork.IsoDocuments.GetByIdAsync(documentId);
+        if (document == null)
+        {
+            return null;
+        }
+        return await _unitOfWork.IsoDocuments.GetFilesByDocumentIdAsync(documentId);
     }
 
     public async Task<IEnumerable<IsoDocument>> GetByYearAsync(int year) =>

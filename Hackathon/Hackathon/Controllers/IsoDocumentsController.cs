@@ -71,6 +71,25 @@ public class IsoDocumentsController : ControllerBase
     }
 
     /// <summary>
+    /// Retrieves files of an ISO document.
+    /// </summary>
+    [HttpGet("{id:long}/files")]
+    [SwaggerOperation(Summary = "Retrieves files for an ISO document.", Description = "Gets all files associated with the specified ISO document.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<IsoFile>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> GetFiles(long id)
+    {
+        var files = await _service.GetFilesAsync(id);
+        if (files == null)
+        {
+            return NotFound();
+        }
+        return Ok(files);
+    }
+
+    /// <summary>
     /// Creates a new ISO document.
     /// </summary>
     [HttpPost]

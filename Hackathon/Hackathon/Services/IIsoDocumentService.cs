@@ -13,4 +13,5 @@ public interface IIsoDocumentService
     Task<bool> EnableAsync(long id);
     Task<IsoDocument> UploadAsync(long documentId, UploadIsoDocumentRequest request, long uploaderId);
     Task<IEnumerable<IsoDocument>> GetByYearAsync(int year);
+    Task<IEnumerable<IsoFile>?> GetFilesAsync(long documentId);
 }
