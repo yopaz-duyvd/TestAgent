@@ -10,35 +10,32 @@ public class ApprovedApplicationRepository(AppDbContext context) : IApprovedAppl
 {
     public async Task<IEnumerable<ApprovedApplication>> GetAllAsync() =>
         await context.ApprovedApplications
-            .Include(a => a.IsoFile)
+            .Include(a => a.IsoDocument)
             .ToListAsync();
 
     public async Task<ApprovedApplication?> GetByIdAsync(long id) =>
         await context.ApprovedApplications
-            .Include(a => a.IsoFile)
+            .Include(a => a.IsoDocument)
             .FirstOrDefaultAsync(a => a.Id == id);
 
     public async Task<IEnumerable<ApprovedApplication>> GetWhitelistAsync()
     {
         var manualApps = await context.ApprovedApplications
-            .Where(a => a.IsoFileId == null)
-            .Include(a => a.IsoFile)
+            .Where(a => a.IsoDocumentId == null)
+            .Include(a => a.IsoDocument)
             .ToListAsync();
 
         var activeDocument = await context.IsoDocuments
-            .Include(d => d.Files)
             .FirstOrDefaultAsync(d => d.IsActive);
 
-        if (activeDocument == null || activeDocument.Files.Count == 0)
+        if (activeDocument == null)
         {
             return manualApps;
         }
 
-        var fileIds = activeDocument.Files.Select(f => f.Id).ToList();
-
         var documentApps = await context.ApprovedApplications
-            .Where(a => a.IsoFileId != null && fileIds.Contains(a.IsoFileId.Value))
-            .Include(a => a.IsoFile)
+            .Where(a => a.IsoDocumentId == activeDocument.Id)
+            .Include(a => a.IsoDocument)
             .ToListAsync();
 
         return manualApps.Concat(documentApps);

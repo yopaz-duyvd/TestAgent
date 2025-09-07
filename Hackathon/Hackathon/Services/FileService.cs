@@ -11,7 +11,6 @@ public class FileService(IMinioClient client, IConfiguration configuration) : IF
 {
     private readonly IMinioClient _client = client;
     private readonly string _bucketName = configuration["Minio:BucketName"]!;
-    private static readonly int _presignedUrlExpirySeconds = (int)Math.Min(TimeSpan.FromDays(365 * 100).TotalSeconds, int.MaxValue);
 
     public async Task<string> UploadFileAsync(IFormFile file)
     {
@@ -24,16 +23,12 @@ public class FileService(IMinioClient client, IConfiguration configuration) : IF
             .WithStreamData(stream)
             .WithObjectSize(stream.Length)
             .WithContentType(file.ContentType));
-        return await _client.PresignedGetObjectAsync(new PresignedGetObjectArgs()
-            .WithBucket(_bucketName)
-            .WithObject(objectName)
-            .WithExpiry(_presignedUrlExpirySeconds));
+        return $"/{_bucketName}/{objectName}";
     }
 
     public async Task DeleteFileAsync(string fileUrl)
     {
-        var uri = new Uri(fileUrl);
-        var objectName = uri.AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries).Last();
+        var objectName = fileUrl.Split('/', StringSplitOptions.RemoveEmptyEntries).Last();
         await _client.RemoveObjectAsync(new RemoveObjectArgs()
             .WithBucket(_bucketName)
             .WithObject(objectName));
