@@ -37,13 +37,6 @@ public class IsoDocumentsController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var docs = await _service.GetAllAsync();
-        foreach (var doc in docs)
-        {
-            foreach (var file in doc.Files)
-            {
-                file.FilePath = await _fileService.GetPresignedUrlAsync(file.FilePath, SevenDaysInSeconds);
-            }
-        }
         return Ok(docs);
     }
 
@@ -63,10 +56,6 @@ public class IsoDocumentsController : ControllerBase
         {
             return NotFound();
         }
-        foreach (var file in doc.Files)
-        {
-            file.FilePath = await _fileService.GetPresignedUrlAsync(file.FilePath, SevenDaysInSeconds);
-        }
         return Ok(doc);
     }
 
@@ -81,13 +70,6 @@ public class IsoDocumentsController : ControllerBase
     public async Task<IActionResult> GetByYear(int year)
     {
         var documents = await _service.GetByYearAsync(year);
-        foreach (var doc in documents)
-        {
-            foreach (var file in doc.Files)
-            {
-                file.FilePath = await _fileService.GetPresignedUrlAsync(file.FilePath, SevenDaysInSeconds);
-            }
-        }
         return Ok(documents);
     }
 
@@ -106,10 +88,6 @@ public class IsoDocumentsController : ControllerBase
         if (files == null)
         {
             return NotFound();
-        }
-        foreach (var file in files)
-        {
-            file.FilePath = await _fileService.GetPresignedUrlAsync(file.FilePath, SevenDaysInSeconds);
         }
         return Ok(files);
     }
