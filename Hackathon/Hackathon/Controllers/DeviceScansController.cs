@@ -11,7 +11,7 @@ namespace Hackathon.Controllers;
 /// Handles device scan submissions.
 /// </summary>
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/paring")]
 [Authorize]
 public class DeviceScansController(IDeviceScanService service) : ControllerBase
 {
