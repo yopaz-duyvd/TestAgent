@@ -27,6 +27,36 @@ public class DeviceScanService(IUnitOfWork unitOfWork) : IDeviceScanService
             DeviceInfo = JsonSerializer.Serialize(request.SystemInfo),
             ScannedApplications = applications
         };
+        // Retrieve whitelist of approved applications
+        var whitelist = await _unitOfWork.ApprovedApplications.GetWhitelistAsync();
+        var whitelistNames = whitelist
+            .Select(a => a.AppName)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        // Collect scanned applications that are not in the whitelist
+        var violations = new List<ScannedApplication>();
+        foreach (var app in applications)
+        {
+            if (!whitelistNames.Contains(app.AppName))
+            {
+                violations.Add(app);
+            }
+        }
+
+        if (violations.Count > 0)
+        {
+            var violation = new Violation
+            {
+                UserId = userId,
+                TotalViolations = violations.Count,
+                Details = violations.Select(app => new ViolationDetail
+                {
+                    ScannedApplication = app
+                }).ToList()
+            };
+
+            scan.Violations.Add(violation);
+        }
 
         await _unitOfWork.DeviceScans.AddAsync(scan);
         await _unitOfWork.SaveChangesAsync();
