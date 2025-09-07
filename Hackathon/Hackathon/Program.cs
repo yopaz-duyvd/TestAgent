@@ -88,7 +88,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOrAnalyst", policy =>
-        policy.RequireRole("admin", "analyst"));
+        policy.RequireClaim("role", "admin", "analyst"));
 });
 
 var app = builder.Build();

@@ -24,7 +24,7 @@ public static class ClaimsPrincipalExtensions
             return null;
         }
 
-        return user.FindFirst(ClaimTypes.Role)?.Value;
+        return user.FindFirst("role")?.Value;
     }
 }
 
