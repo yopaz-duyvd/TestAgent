@@ -2,11 +2,12 @@ namespace Hackathon.Extensions;
 
 using Hackathon.Models;
 using Hackathon.UnitOfWork;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 public static class SeedExtensions
 {
@@ -49,9 +50,16 @@ public static class SeedExtensions
 
     private class UserSeed
     {
-        public required string Email { get; set; }
+        [JsonPropertyName("email")]
+        public string Email { get; set; }
+
+        [JsonPropertyName("password")]
         public string Password { get; set; } = "123456";
+
+        [JsonPropertyName("isSeed")]
         public bool IsSeed { get; set; }
+
+        [JsonPropertyName("role")]
         public string Role { get; set; } = "user";
     }
 }
