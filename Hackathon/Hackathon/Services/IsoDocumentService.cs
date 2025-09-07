@@ -13,7 +13,70 @@ public class IsoDocumentService(IUnitOfWork unitOfWork, IFileService fileService
     private readonly IFileService _fileService = fileService;
     private const long MaxRequestSize = 1L * 1024 * 1024 * 1024; // 1GB
 
-    public async Task<IsoDocument> UploadAsync(UploadIsoDocumentRequest request, long uploaderId)
+    public async Task<IsoDocument> CreateAsync(IsoDocumentRequest request, long uploaderId)
+    {
+        var count = await _unitOfWork.IsoDocuments.CountByYearAsync(request.Year);
+        var version = $"ISO_{request.Year}_v{count + 1}";
+        var document = new IsoDocument
+        {
+            Year = request.Year,
+            Notes = request.Notes,
+            Version = version,
+            UploaderId = uploaderId
+        };
+        await _unitOfWork.IsoDocuments.AddAsync(document);
+        await _unitOfWork.SaveChangesAsync();
+        return document;
+    }
+
+    public async Task<IEnumerable<IsoDocument>> GetAllAsync() =>
+        await _unitOfWork.IsoDocuments.GetAllAsync();
+
+    public async Task<IsoDocument?> GetByIdAsync(long id) =>
+        await _unitOfWork.IsoDocuments.GetByIdAsync(id);
+
+    public async Task<bool> UpdateAsync(long id, IsoDocumentRequest request)
+    {
+        var document = await _unitOfWork.IsoDocuments.GetByIdAsync(id);
+        if (document == null)
+        {
+            return false;
+        }
+        document.Year = request.Year;
+        document.Notes = request.Notes;
+        await _unitOfWork.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> DeleteAsync(long id)
+    {
+        var document = await _unitOfWork.IsoDocuments.GetByIdAsync(id);
+        if (document == null)
+        {
+            return false;
+        }
+        _unitOfWork.IsoDocuments.Remove(document);
+        await _unitOfWork.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> EnableAsync(long id)
+    {
+        var document = await _unitOfWork.IsoDocuments.GetByIdAsync(id);
+        if (document == null)
+        {
+            return false;
+        }
+        var all = await _unitOfWork.IsoDocuments.GetAllAsync();
+        foreach (var doc in all)
+        {
+            doc.IsActive = doc.Id == id;
+        }
+        await _unitOfWork.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<IsoDocument> UploadAsync(long documentId, UploadIsoDocumentRequest request, long uploaderId)
     {
         if (request.Files.Sum(f => f.Length) > MaxRequestSize)
         {
@@ -28,16 +91,10 @@ public class IsoDocumentService(IUnitOfWork unitOfWork, IFileService fileService
             }
         }
 
-        var count = await _unitOfWork.IsoDocuments.CountByYearAsync(request.Year);
-        var version = $"ISO_{request.Year}_v{count + 1}";
+        var document = await _unitOfWork.IsoDocuments.GetByIdAsync(documentId)
+            ?? throw new InvalidOperationException("ISO document not found.");
 
-        var document = new IsoDocument
-        {
-            Year = request.Year,
-            Notes = request.Notes,
-            Version = version,
-            UploaderId = uploaderId
-        };
+        document.UploaderId ??= uploaderId;
 
         foreach (var file in request.Files)
         {
@@ -49,12 +106,11 @@ public class IsoDocumentService(IUnitOfWork unitOfWork, IFileService fileService
             });
         }
 
-        await _unitOfWork.IsoDocuments.AddAsync(document);
         await _unitOfWork.SaveChangesAsync();
-
         return document;
     }
 
     public async Task<IEnumerable<IsoDocument>> GetByYearAsync(int year) =>
         await _unitOfWork.IsoDocuments.GetByYearAsync(year);
 }
+

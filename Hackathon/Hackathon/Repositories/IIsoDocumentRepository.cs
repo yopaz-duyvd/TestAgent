@@ -8,4 +8,7 @@ public interface IIsoDocumentRepository
     Task<int> CountByYearAsync(int year);
     Task AddAsync(IsoDocument document);
     Task<IEnumerable<IsoDocument>> GetByYearAsync(int year);
+    Task<IEnumerable<IsoDocument>> GetAllAsync();
+    Task<IsoDocument?> GetByIdAsync(long id);
+    void Remove(IsoDocument document);
 }
