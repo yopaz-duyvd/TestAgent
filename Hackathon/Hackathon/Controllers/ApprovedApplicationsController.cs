@@ -1,6 +1,9 @@
+using System.Collections.Generic;
+using Hackathon.Models;
 using Hackathon.Models.Dtos;
 using Hackathon.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -20,6 +23,9 @@ public class ApprovedApplicationsController(IApprovedApplicationService service)
     /// <returns>All approved applications.</returns>
     [HttpGet]
     [SwaggerOperation(Summary = "Retrieves all approved applications.", Description = "Gets the list of every approved application in the system.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ApprovedApplication>))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> GetAll()
     {
         var apps = await service.GetAllAsync();
@@ -32,6 +38,9 @@ public class ApprovedApplicationsController(IApprovedApplicationService service)
     /// <returns>Whitelist of approved applications.</returns>
     [HttpGet("whitelist")]
     [SwaggerOperation(Summary = "Retrieves whitelist.", Description = "Gets applications manually approved or linked to the active ISO document.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ApprovedApplication>))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> GetWhitelist()
     {
         var apps = await service.GetWhitelistAsync();
@@ -45,6 +54,10 @@ public class ApprovedApplicationsController(IApprovedApplicationService service)
     /// <returns>The approved application if found.</returns>
     [HttpGet("{id:long}")]
     [SwaggerOperation(Summary = "Retrieves an approved application by ID.", Description = "Gets a single approved application matching the provided identifier.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApprovedApplication))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Get(long id)
     {
         var app = await service.GetByIdAsync(id);
@@ -62,6 +75,10 @@ public class ApprovedApplicationsController(IApprovedApplicationService service)
     /// <returns>The created approved application.</returns>
     [HttpPost]
     [SwaggerOperation(Summary = "Creates a new approved application.", Description = "Adds a new approved application using the provided request data.")]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ApprovedApplication))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Create(ApprovedApplicationRequest request)
     {
         var app = await service.CreateAsync(request);
@@ -76,6 +93,10 @@ public class ApprovedApplicationsController(IApprovedApplicationService service)
     /// <returns>No content if update succeeds.</returns>
     [HttpPut("{id:long}")]
     [SwaggerOperation(Summary = "Updates an existing approved application.", Description = "Replaces an approved application's information with new values.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Update(long id, ApprovedApplicationRequest request)
     {
         var success = await service.UpdateAsync(id, request);
@@ -93,6 +114,10 @@ public class ApprovedApplicationsController(IApprovedApplicationService service)
     /// <returns>No content if deletion succeeds.</returns>
     [HttpDelete("{id:long}")]
     [SwaggerOperation(Summary = "Deletes an approved application.", Description = "Removes an approved application from the system.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Delete(long id)
     {
         var success = await service.DeleteAsync(id);

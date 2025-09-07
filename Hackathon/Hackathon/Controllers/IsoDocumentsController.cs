@@ -1,9 +1,12 @@
+using System;
+using System.Collections.Generic;
 using Hackathon.Extensions;
+using Hackathon.Models;
 using Hackathon.Models.Dtos;
 using Hackathon.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Hackathon.Controllers;
@@ -30,6 +33,9 @@ public class IsoDocumentsController : ControllerBase
     /// <returns>ISO documents for the specified year.</returns>
     [HttpGet("year/{year:int}")]
     [SwaggerOperation(Summary = "Retrieves ISO documents by year.", Description = "Gets all ISO documents uploaded for a specific year.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<IsoDocument>))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> GetByYear(int year)
     {
         var documents = await _service.GetByYearAsync(year);
@@ -44,6 +50,10 @@ public class IsoDocumentsController : ControllerBase
     [HttpPost]
     [RequestSizeLimit(1L * 1024 * 1024 * 1024)]
     [SwaggerOperation(Summary = "Uploads a new ISO document.", Description = "Stores a new ISO document and returns its identifier and version.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Upload([FromForm] UploadIsoDocumentRequest request)
     {
         var userId = User.GetUserId();
