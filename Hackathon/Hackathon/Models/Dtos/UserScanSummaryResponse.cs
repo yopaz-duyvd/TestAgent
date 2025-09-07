@@ -7,4 +7,5 @@ public class UserScanSummaryResponse
     public string? FullName { get; set; }
     public DateTime? LastScannedAt { get; set; }
     public int ApprovedApplicationCount { get; set; }
+    public int TotalApplicationCount { get; set; }
 }
