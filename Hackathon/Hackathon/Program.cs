@@ -1,13 +1,14 @@
+using Hackathon.Extensions;
 using Hackathon.Repositories;
 using Hackathon.Services;
 using Hackathon.UnitOfWork;
-using Hackathon.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Minio;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -88,7 +89,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOrAnalyst", policy =>
-        policy.RequireClaim("role", "admin", "analyst"));
+        policy.RequireClaim(ClaimTypes.Role, "admin", "analyst"));
 });
 
 var app = builder.Build();
