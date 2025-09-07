@@ -33,12 +33,17 @@ public class DeviceScanService(IUnitOfWork unitOfWork) : IDeviceScanService
             .Select(a => a.AppName)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-        // Collect scanned applications that are not in the whitelist
+        // Flag applications based on whitelist and collect violations
         var violations = new List<ScannedApplication>();
         foreach (var app in applications)
         {
-            if (!whitelistNames.Contains(app.AppName))
+            if (whitelistNames.Contains(app.AppName))
             {
+                app.IsApproved = true;
+            }
+            else
+            {
+                app.IsApproved = false;
                 violations.Add(app);
             }
         }
