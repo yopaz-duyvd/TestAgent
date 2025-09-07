@@ -19,6 +19,8 @@ public class IsoDocument
     public string? Notes { get; set; }
     [Column("is_active")]
     public bool IsActive { get; set; }
+    [Column("scanned_at")]
+    public DateTime? ScannedAt { get; set; }
 
     public User? Uploader { get; set; }
     public ICollection<IsoFile> Files { get; set; } = new List<IsoFile>();
