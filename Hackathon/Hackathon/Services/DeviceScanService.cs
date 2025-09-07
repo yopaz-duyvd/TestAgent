@@ -90,7 +90,7 @@ public class DeviceScanService(IUnitOfWork unitOfWork) : IDeviceScanService
                 Details = v.Details.Select(d => new ViolationDetailResponse
                 {
                     Id = d.Id,
-                    ScannedAppId = d.ScannedAppId
+                    ScannedApplicationId = d.ScannedApplicationId
                 }).ToList()
             }).ToList()
         }).ToList();

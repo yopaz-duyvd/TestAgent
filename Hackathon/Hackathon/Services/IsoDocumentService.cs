@@ -13,7 +13,7 @@ public class IsoDocumentService(IUnitOfWork unitOfWork, IFileService fileService
     private readonly IFileService _fileService = fileService;
     private const long MaxRequestSize = 1L * 1024 * 1024 * 1024; // 1GB
 
-    public async Task<IsoDocument> UploadAsync(UploadIsoDocumentRequest request, long uploadedBy)
+    public async Task<IsoDocument> UploadAsync(UploadIsoDocumentRequest request, long uploaderId)
     {
         if (request.Files.Sum(f => f.Length) > MaxRequestSize)
         {
@@ -36,7 +36,7 @@ public class IsoDocumentService(IUnitOfWork unitOfWork, IFileService fileService
             Year = request.Year,
             Notes = request.Notes,
             Version = version,
-            UploadedBy = uploadedBy
+            UploaderId = uploaderId
         };
 
         foreach (var file in request.Files)

@@ -10,7 +10,7 @@ public class ViolationDetail
     [Column("violation_id")]
     public long ViolationId { get; set; }
     [Column("scanned_app_id")]
-    public long ScannedAppId { get; set; }
+    public long ScannedApplicationId { get; set; }
 
     public Violation? Violation { get; set; }
     public ScannedApplication? ScannedApplication { get; set; }
