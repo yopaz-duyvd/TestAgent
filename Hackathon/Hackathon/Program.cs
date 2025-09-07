@@ -57,7 +57,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IIsoDocumentService, IsoDocumentService>();
 builder.Services.AddScoped<IApprovedApplicationService, ApprovedApplicationService>();
 builder.Services.AddScoped<IDeviceScanService, DeviceScanService>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IManagerUserService, ManagerUserService>();
 builder.Services.AddMinio(config =>
 {
     config.WithEndpoint(builder.Configuration["Minio:Endpoint"]!)

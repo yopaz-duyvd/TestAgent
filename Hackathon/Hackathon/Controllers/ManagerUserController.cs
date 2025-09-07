@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(Policy = "AdminOrAnalyst")]
-public class UsersController(IUserService userService) : ControllerBase
+public class ManagerUserController(IManagerUserService managerUserService) : ControllerBase
 {
     [HttpGet("latest-scan")]
     public async Task<IActionResult> GetUsersWithLatestScan()
     {
-        var users = await userService.GetUsersWithLastScanAsync();
+        var users = await managerUserService.GetUsersWithLastScanAsync();
         return Ok(users);
     }
 }
