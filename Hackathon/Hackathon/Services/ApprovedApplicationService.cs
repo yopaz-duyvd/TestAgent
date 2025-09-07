@@ -22,7 +22,7 @@ public class ApprovedApplicationService(IUnitOfWork unitOfWork) : IApprovedAppli
     {
         var application = new ApprovedApplication
         {
-            IsoFileId = request.IsoFileId,
+            IsoDocumentId = request.IsoDocumentId,
             AppName = request.AppName,
             AppVersion = request.AppVersion,
             Vendor = request.Vendor,
@@ -42,7 +42,7 @@ public class ApprovedApplicationService(IUnitOfWork unitOfWork) : IApprovedAppli
             return false;
         }
 
-        application.IsoFileId = request.IsoFileId;
+        application.IsoDocumentId = request.IsoDocumentId;
         application.AppName = request.AppName;
         application.AppVersion = request.AppVersion;
         application.Vendor = request.Vendor;

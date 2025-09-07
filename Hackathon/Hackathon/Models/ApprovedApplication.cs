@@ -7,8 +7,8 @@ public class ApprovedApplication
 {
     [Column("id")]
     public long Id { get; set; }
-    [Column("iso_file_id")]
-    public long? IsoFileId { get; set; }
+    [Column("iso_document_id")]
+    public long? IsoDocumentId { get; set; }
     [Column("app_name")]
     public required string AppName { get; set; }
     [Column("app_version")]
@@ -19,5 +19,5 @@ public class ApprovedApplication
     public string? Category { get; set; }
     [Column("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public IsoFile? IsoFile { get; set; }
+    public IsoDocument? IsoDocument { get; set; }
 }
