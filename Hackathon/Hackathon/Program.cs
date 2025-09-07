@@ -1,6 +1,7 @@
 using Hackathon.Repositories;
 using Hackathon.Services;
 using Hackathon.UnitOfWork;
+using Hackathon.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -101,6 +102,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await app.SeedUsersAsync();
 
 app.Run();
 

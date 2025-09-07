@@ -20,4 +20,10 @@
     <PackageReference Include="Minio" Version="6.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="SeedData/users.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

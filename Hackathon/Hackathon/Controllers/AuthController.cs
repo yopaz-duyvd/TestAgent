@@ -13,17 +13,17 @@ using Swashbuckle.AspNetCore.Annotations;
 public class AuthController(IAuthService authService) : ControllerBase
 {
     /// <summary>
-    /// Authenticates a user using Google login.
+    /// Authenticates a user using email and password.
     /// </summary>
-    /// <param name="request">The Google login details.</param>
+    /// <param name="request">The login details.</param>
     /// <returns>A JWT token if authentication succeeds.</returns>
     [HttpPost("login")]
-    [SwaggerOperation(Summary = "Authenticates a user using Google login.", Description = "Validates Google credentials and returns a JWT token.")]
-    public async Task<IActionResult> Login(GoogleLoginRequest request)
+    [SwaggerOperation(Summary = "Authenticates a user using email and password.", Description = "Validates credentials and returns a JWT token.")]
+    public async Task<IActionResult> Login(LoginRequest request)
     {
         try
         {
-            var token = await authService.LoginWithGoogleAsync(request.Email, request.ClientId);
+            var token = await authService.LoginAsync(request.Email, request.Password);
             return Ok(new { token });
         }
         catch
