@@ -6,4 +6,5 @@ public class UserScanSummaryResponse
     public string Email { get; set; } = null!;
     public string? FullName { get; set; }
     public DateTime? LastScannedAt { get; set; }
+    public int ApprovedApplicationCount { get; set; }
 }

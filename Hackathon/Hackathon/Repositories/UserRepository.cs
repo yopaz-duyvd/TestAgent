@@ -4,6 +4,7 @@ using Hackathon.Models;
 using Hackathon.Models.Dtos;
 using Hackathon.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 public class UserRepository(AppDbContext context) : IUserRepository
 {
@@ -31,6 +32,11 @@ public class UserRepository(AppDbContext context) : IUserRepository
                     .Where(ds => ds.UserId == u.Id)
                     .OrderByDescending(ds => ds.ScannedAt)
                     .Select(ds => (DateTime?)ds.ScannedAt)
+                    .FirstOrDefault(),
+                ApprovedApplicationCount = context.DeviceScans
+                    .Where(ds => ds.UserId == u.Id)
+                    .OrderByDescending(ds => ds.ScannedAt)
+                    .Select(ds => ds.ScannedApplications.Count(sa => sa.IsApproved == true))
                     .FirstOrDefault()
             })
             .ToListAsync();

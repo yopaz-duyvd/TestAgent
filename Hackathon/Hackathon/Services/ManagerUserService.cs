@@ -23,7 +23,8 @@ public class ManagerUserService(IUnitOfWork unitOfWork) : IManagerUserService
         {
             Id = s.Id,
             ScannedAt = s.ScannedAt,
-            ApplicationCount = s.ScannedApplications.Count
+            ApplicationCount = s.ScannedApplications.Count,
+            ApprovedApplicationCount = s.ScannedApplications.Count(a => a.IsApproved == true)
         }).ToList();
 
         var latest = ordered.FirstOrDefault();
